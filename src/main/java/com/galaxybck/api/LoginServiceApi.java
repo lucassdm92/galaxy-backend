@@ -1,5 +1,6 @@
 package com.galaxybck.api;
 
+import com.galaxybck.model.dto.ApiResponse;
 import com.galaxybck.model.dto.LoginRequest;
 import com.galaxybck.model.dto.LoginResponse;
 import com.galaxybck.model.service.LoginServices;
@@ -23,8 +24,11 @@ public class LoginServiceApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
         log.info("POST /api/auth/login called - username: {}", request.getUsername());
-        return ResponseEntity.ok(loginServices.login(request));
+
+        LoginResponse loginResponse = loginServices.login(request);
+
+        return ResponseEntity.ok(new ApiResponse<>("200","Login Successful", loginResponse));
     }
 }

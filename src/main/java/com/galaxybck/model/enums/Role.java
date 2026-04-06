@@ -1,4 +1,7 @@
 package com.galaxybck.model.enums;
 
-public class Role {
+public enum Role {
+    CLIENT,
+    RIDER,
+    ADMIN
 }

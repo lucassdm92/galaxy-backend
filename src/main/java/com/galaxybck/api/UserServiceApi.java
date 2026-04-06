@@ -1,13 +1,11 @@
 package com.galaxybck.api;
 
-import com.galaxybck.model.dto.LoginRequest;
-import com.galaxybck.model.dto.LoginResponse;
-import com.galaxybck.model.dto.UserRequest;
-import com.galaxybck.model.dto.UserResponse;
+import com.galaxybck.model.dto.*;
 import com.galaxybck.model.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -24,14 +22,15 @@ public class UserServiceApi {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<UserResponse>> register(@RequestBody UserRequest request) {
         log.info("POST /api/user/register called - username: {}", request.getUsername());
-        return ResponseEntity.ok(userService.register(request));
+        return ResponseEntity.ok(new ApiResponse<>("200", "User registered sucessfull", userService.register(request)));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getById(@PathVariable Integer id) {
         log.info("GET /api/user/{} called", id);
-        return ResponseEntity.ok(userService.getById(id));
+        return ResponseEntity.ok(UserResponse.from(userService.getById(id)));
     }
 }

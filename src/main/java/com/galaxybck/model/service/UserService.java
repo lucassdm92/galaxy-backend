@@ -1,17 +1,20 @@
 package com.galaxybck.model.service;
 
-import com.galaxybck.model.dto.LoginRequest;
-import com.galaxybck.model.dto.LoginResponse;
+import com.galaxybck.exception.EmailAlreadyInUseException;
+import com.galaxybck.exception.UserAlreadyInUseException;
+import com.galaxybck.exception.UserNotFoundExcpetion;
 import com.galaxybck.model.dto.UserRequest;
 import com.galaxybck.model.dto.UserResponse;
-import com.galaxybck.model.entity.Client;
 import com.galaxybck.model.entity.User;
-import com.galaxybck.model.repository.ClientRepository;
 import com.galaxybck.model.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -19,29 +22,30 @@ public class UserService {
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    private final JwtService jwtService;
-
-    public UserService(UserRepository userRepository, JwtService jwtService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
     public UserResponse register(UserRequest request) {
+
         userRepository.findByUsername(request.getUsername()).ifPresent(u -> {
-            throw new RuntimeException("Username already in use: " + request.getUsername());
+            throw new UserAlreadyInUseException(request.getUsername());
         });
 
         userRepository.findByEmail(request.getEmail()).ifPresent(u -> {
-            throw new RuntimeException("Email already in use: " + request.getEmail());
+            throw new EmailAlreadyInUseException(request.getEmail());
         });
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setCreatedBy(request.getCreatedBy());
+        user.setRole(request.getRole());
 
         User saved = userRepository.save(user);
         log.info("User registered with id: {}", saved.getUsername());
@@ -49,10 +53,10 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserResponse getById(Integer id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found: " + id));
-        return UserResponse.from(user);
+    public User getById(Integer id) {
+        log.info("getById user account - searching for user id: {}", id);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundExcpetion(id));
     }
 
     public UserResponse findUserByEmail(String email) {
@@ -60,8 +64,13 @@ public class UserService {
         return UserResponse.from(user);
     }
 
-    public UserResponse findUserByUserName(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found: " + username));
-        return UserResponse.from(user);
+    public Optional<User> findUserByUserName(String username) {
+        log.info("findUserByUserName - searching for username: {}", username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> {
+            log.warn("findUserByUserName - user not found for username: {}", username);
+            return new UserNotFoundExcpetion("User not found: " + username);
+        });
+        log.info("findUserByUserName - user found: id={}, username={}", user.getId(), user.getUsername());
+        return Optional.of(user);
     }
 }

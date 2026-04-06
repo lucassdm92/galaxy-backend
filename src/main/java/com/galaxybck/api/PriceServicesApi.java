@@ -6,6 +6,7 @@ import com.galaxybck.model.service.PriceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -22,12 +23,10 @@ public class PriceServicesApi {
     }
 
     @PostMapping("/current")
+    @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
     public ResponseEntity<PriceCalculatorResponse> getCurrentPrice(@RequestBody RequestPrice request) {
-        log.info("POST /api/prices/current called - origin: {}, destination: {}", request.getOrigin(), request.getDestination());
+        log.info("POST /api/prices/current called - origin: {}, destination: {}", request.origin(), request.destination());
         PriceCalculatorResponse response = priceService.getPriceConfig(request);
-        if (response == null) {
-            return ResponseEntity.noContent().build();
-        }
         return ResponseEntity.ok(response);
     }
 }

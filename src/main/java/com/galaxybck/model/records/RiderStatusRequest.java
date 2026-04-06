@@ -1,4 +1,6 @@
 package com.galaxybck.model.records;
 
-public record RiderStatusRequest() {
+import com.galaxybck.model.enums.RiderStatus;
+
+public record RiderStatusRequest(RiderStatus riderStatus) {
 }

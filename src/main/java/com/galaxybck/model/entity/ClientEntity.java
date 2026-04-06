@@ -1,12 +1,21 @@
 package com.galaxybck.model.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Table(name = "GLX_CLIENT")
-public class Client {
+public class ClientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,10 +50,10 @@ public class Client {
     @JoinColumn(name = "USER_ID", unique = true, nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "clientEntity")
     private List<PriceCalculation> priceCalculations;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "clientEntity")
     private List<Delivery> deliveries;
 
     @PrePersist
@@ -56,39 +65,4 @@ public class Client {
     protected void onUpdate() {
         this.dateUpdated = LocalDateTime.now();
     }
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
-
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-
-    public String getVat() { return vat; }
-    public void setVat(String vat) { this.vat = vat; }
-
-    public String getCreatedBy() { return createdBy; }
-    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
-
-    public LocalDateTime getDateCreated() { return dateCreated; }
-    public void setDateCreated(LocalDateTime dateCreated) { this.dateCreated = dateCreated; }
-
-    public LocalDateTime getDateUpdated() { return dateUpdated; }
-    public void setDateUpdated(LocalDateTime dateUpdated) { this.dateUpdated = dateUpdated; }
-
-    public User getUser() { return user; }
-    public void setUser(User user) { this.user = user; }
-
-    public List<PriceCalculation> getPriceCalculations() { return priceCalculations; }
-    public void setPriceCalculations(List<PriceCalculation> priceCalculations) { this.priceCalculations = priceCalculations; }
-
-    public List<Delivery> getDeliveries() { return deliveries; }
-    public void setDeliveries(List<Delivery> deliveries) { this.deliveries = deliveries; }
 }

@@ -6,6 +6,7 @@ import com.galaxybck.model.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
@@ -22,14 +23,16 @@ public class ClientServiceApi {
     }
 
     @PostMapping("/register")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ClientResponse> register(@RequestBody ClientRequest request) {
         log.info("POST /api/client/register called - email: {}", "teste");
         return ResponseEntity.ok(clientService.register(request));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClientResponse> getById(@PathVariable Integer id) {
-        log.info("GET /api/client/{} called", id);
-        return ResponseEntity.ok(clientService.getById(id));
+    @GetMapping("/{userName}")
+    @PreAuthorize("hasRole('CLIENT')")
+    public ResponseEntity<ClientResponse> clientInformationByUserName(@PathVariable String userName) {
+        log.info("GET /api/client/{} called", userName);
+        return ResponseEntity.ok(clientService.retriveClientInfoByUserName(userName));
     }
 }

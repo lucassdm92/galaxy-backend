@@ -1,4 +1,5 @@
 package com.galaxybck.event;
 
-public class DeliveryAvailableEvent {
-}
+import com.galaxybck.model.dto.DeliveryResponse;
+
+public record DeliveryAvailableEvent(String riderUsername, DeliveryResponse response) {}

@@ -18,10 +18,9 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    public String generateToken(String username, Integer userId) {
+    public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
-                .claim("user_id", userId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSecretKey())

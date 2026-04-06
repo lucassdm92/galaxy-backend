@@ -1,11 +1,19 @@
 package com.galaxybck.model.entity;
 
+import com.galaxybck.model.enums.DeliveryStatus;
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
-@Table(name = "delivery")
+@Table(name = "GLX_DELIVERY")
 public class Delivery {
 
     @Id
@@ -27,13 +35,37 @@ public class Delivery {
     @Column(name = "customer_note", length = 500)
     private String customerNote;
 
-    @OneToOne
+    @Column(name = "customer_email", length = 500)
+    private String customerEmail;
+
+    @Column(name = "EXTERNAL_DELIVERY_CODE", length = 500)
+    private String externalDeliveryCode;
+
+    @Column(name = "PASSWORD_TO_COLLECT", length = 500)
+    private Integer passwordToCollect;
+
+    @Column(name = "PASSWORD_TO_DELIVERY", length = 500)
+    private Integer passwordToDelivery;
+
+    @ManyToOne
     @JoinColumn(name = "price_calculation_id", nullable = false)
     private PriceCalculation priceCalculation;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
+    private ClientEntity clientEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "rider_id", nullable = true)
+    private Rider rider;
+
+
+    @OneToMany(mappedBy = "delivery")
+    private List<DeliveryHistory>  deliveryHistory;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false, length = 20)
+    private DeliveryStatus status = DeliveryStatus.PENDING;
 
     @Column(name = "date_created")
     private LocalDateTime dateCreated;
@@ -42,31 +74,4 @@ public class Delivery {
     protected void onCreate() {
         this.dateCreated = LocalDateTime.now();
     }
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-
-    public String getOrigin() { return origin; }
-    public void setOrigin(String origin) { this.origin = origin; }
-
-    public String getDestination() { return destination; }
-    public void setDestination(String destination) { this.destination = destination; }
-
-    public String getCustomerName() { return customerName; }
-    public void setCustomerName(String customerName) { this.customerName = customerName; }
-
-    public String getCustomerPhone() { return customerPhone; }
-    public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
-
-    public String getCustomerNote() { return customerNote; }
-    public void setCustomerNote(String customerNote) { this.customerNote = customerNote; }
-
-    public PriceCalculation getPriceCalculation() { return priceCalculation; }
-    public void setPriceCalculation(PriceCalculation priceCalculation) { this.priceCalculation = priceCalculation; }
-
-    public Client getClient() { return client; }
-    public void setClient(Client client) { this.client = client; }
-
-    public LocalDateTime getDateCreated() { return dateCreated; }
-    public void setDateCreated(LocalDateTime dateCreated) { this.dateCreated = dateCreated; }
 }

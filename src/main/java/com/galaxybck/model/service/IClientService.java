@@ -1,4 +1,7 @@
 package com.galaxybck.model.service;
 
-public class IClientService {
+import com.galaxybck.model.dto.ClientResponse;
+
+public interface IClientService {
+   ClientResponse retriveClientInfoByUserName(String userName);
 }

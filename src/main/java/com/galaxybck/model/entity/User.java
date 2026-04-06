@@ -1,39 +1,58 @@
 package com.galaxybck.model.entity;
 
+import com.galaxybck.model.enums.Role;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
-@Table(name = "user_account")
-public class User {
+@Getter
+@Setter
+@Table(name = "GLX_USER_ACCOUNT")
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Integer id;
 
-    @Column(name = "username", nullable = false, unique = true, length = 100)
+    @Column(name = "USER_NAME", nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(name = "USER_EMAIL", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "USER_PASSWORD", nullable = false, length = 255)
     private String password;
 
-    @Column(name = "active")
+    @Column(name = "USER_ACTIVE")
     private Boolean active = true;
 
-    @Column(name = "date_created")
+    @Column(name = "USER_DATE_CREATED")
     private LocalDateTime dateCreated;
 
-    @Column(name = "date_updated")
+    @Column(name = "DATE_UPDATED")
     private LocalDateTime dateUpdated;
 
-    @Column(name = "created_by", length = 100)
+    @Column(name = "CREATED_BY", length = 100)
     private String createdBy;
 
     @OneToOne(mappedBy = "user")
-    private Client client;
+    private ClientEntity clientEntity;
+
+    @OneToOne(mappedBy = "user")
+    private Rider rider;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @PrePersist
     protected void onCreate() {
@@ -45,30 +64,38 @@ public class User {
         this.dateUpdated = LocalDateTime.now();
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-    public LocalDateTime getDateCreated() { return dateCreated; }
-    public void setDateCreated(LocalDateTime dateCreated) { this.dateCreated = dateCreated; }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-    public LocalDateTime getDateUpdated() { return dateUpdated; }
-    public void setDateUpdated(LocalDateTime dateUpdated) { this.dateUpdated = dateUpdated; }
-
-    public String getCreatedBy() { return createdBy; }
-    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
-
-    public Client getClient() { return client; }
-    public void setClient(Client client) { this.client = client; }
+    @Override
+    public boolean isEnabled() {
+        return active;
+    } // 👈 usa o campo active!
 }

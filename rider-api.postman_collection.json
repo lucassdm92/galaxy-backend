@@ -1,0 +1,323 @@
+{
+  "info": {
+    "name": "GalaxyBck - API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"secret123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"john.doe\",\n  \"email\": \"john.doe@email.com\",\n  \"password\": \"secret123\",\n  \"created_by\": \"admin\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Client",
+      "item": [
+        {
+          "name": "Register Client",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/client/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "client", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"+353 87 123 4567\",\n  \"address\": \"123 Main Street, Dublin\",\n  \"vat\": \"IE1234567T\",\n  \"user_id\": 1,\n  \"created_by\": \"admin\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get Client by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/client/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "client", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rider",
+      "item": [
+        {
+          "name": "Register Rider",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"phone\": \"+353 87 123 4567\",\n  \"address\": \"123 Main Street, Dublin\",\n  \"vehicle_type\": \"BICYCLE\",\n  \"vehicle_plate\": null,\n  \"identification_document\": \"PA1234567\",\n  \"drive_license\": \"DL9876543\",\n  \"vat_number\": \"1234567T\",\n  \"vat\": \"IE1234567T\",\n  \"rider_type\": \"STUDENT\",\n  \"email\": \"john.doe@email.com\",\n  \"password\": \"secret123\",\n  \"created_by\": \"admin\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get Rider by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1"]
+            }
+          }
+        },
+        {
+          "name": "List All Riders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider"]
+            }
+          }
+        },
+        {
+          "name": "Toggle Active",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/toggle-active",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "toggle-active"]
+            }
+          }
+        },
+        {
+          "name": "Accept Delivery",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/delivery/1/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "delivery", "1", "accept"]
+            }
+          }
+        },
+        {
+          "name": "Refuse Delivery",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/delivery/1/refuse",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "delivery", "1", "refuse"]
+            }
+          }
+        },
+        {
+          "name": "Collect Delivery",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/delivery/1/collect",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "delivery", "1", "collect"]
+            }
+          }
+        },
+        {
+          "name": "Deliver Delivery",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/delivery/1/deliver",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "delivery", "1", "deliver"]
+            }
+          }
+        },
+        {
+          "name": "Get Rider Delivery History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rider/1/history",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rider", "1", "history"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delivery",
+      "item": [
+        {
+          "name": "Request Delivery",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/delivery/request",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "delivery", "request"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price_calculation_id\": 1,\n  \"client_id\": 1,\n  \"origin\": \"123 Main Street, Dublin\",\n  \"destination\": \"456 Oak Avenue, Dublin\",\n  \"customer_name\": \"John Doe\",\n  \"customer_phone\": \"+353 87 123 4567\",\n  \"customer_note\": \"Leave at the door\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "List Pending Deliveries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/delivery/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "delivery", "pending"]
+            }
+          }
+        },
+        {
+          "name": "List Deliveries by Client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/delivery/client/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "delivery", "client", "1"]
+            }
+          }
+        },
+        {
+          "name": "List Deliveries by Rider",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/delivery/myDelivery/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "delivery", "myDelivery", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Price",
+      "item": [
+        {
+          "name": "Get Current Price",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/prices/current",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "prices", "current"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": \"123 Main Street, Dublin\",\n  \"destination\": \"456 Oak Avenue, Dublin\",\n  \"date\": \"2026-03-31T10:00:00\",\n  \"user_ip\": \"127.0.0.1\",\n  \"clientId\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "WebSocket",
+      "item": [
+        {
+          "name": "Listen - New Delivery (Raw)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "ws://localhost:8080/ws-raw",
+              "protocol": "ws",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["ws-raw"]
+            }
+          },
+          "description": "Conecta e recebe notificações de novos deliveries em tempo real. Não precisa enviar nada."
+        }
+      ]
+    }
+  ]
+}
