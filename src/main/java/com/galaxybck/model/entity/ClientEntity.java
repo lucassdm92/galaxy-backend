@@ -5,39 +5,40 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "client")
+@Table(name = "GLX_CLIENT")
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "NAME", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "phone", length = 20)
+    @Column(name = "PHONE", length = 20)
     private String phone;
 
-    @Column(name = "address", length = 255)
+    @Column(name = "ADDRESS", length = 255)
     private String address;
 
-    @Column(name = "vat", length = 20)
+    @Column(name = "VAT", length = 20)
     private String vat;
 
-    @Column(name = "created_by", length = 100)
+    @Column(name = "CREATED_BY", length = 100)
     private String createdBy;
 
-    @Column(name = "active")
+    @Column(name = "ACTIVE")
     private Boolean active = true;
 
-    @Column(name = "date_created")
+    @Column(name = "DATE_CREATED")
     private LocalDateTime dateCreated;
 
-    @Column(name = "date_updated")
+    @Column(name = "DATE_UPDATED")
     private LocalDateTime dateUpdated;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true, nullable = true)
+    @JoinColumn(name = "USER_ID", unique = true, nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "client")
