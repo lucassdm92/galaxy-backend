@@ -30,5 +30,5 @@ VALUES(true, 3, NULL, '2026-04-02 01:17:50.308', 'Lucas', 'jj@teste.com', 'jhon.
 
 -- Create Store based user account client
 INSERT INTO public.glx_client
-(id, active, address, created_by, date_created, date_updated, "name", phone, vat, user_id)
-VALUES(1, true, '123 Main Street, Dublin', 'admin', '2026-04-02 01:18:17.440', NULL, 'Brazilian Food', '+353 87 123 4567', 'IE1234567T', 3);
+(id, active, address, COUNTRY_code,created_by, date_created, date_updated, "name", phone, vat, user_id)
+VALUES(1, true, '123 Main Street, Dublin', 'IE','admin', '2026-04-02 01:18:17.440', NULL, 'Brazilian Food', '+353 87 123 4567', 'IE1234567T', 3);

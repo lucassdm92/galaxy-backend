@@ -181,4 +181,10 @@ public class RiderService {
         log.info("findRiderByStatus - searching rider with status={}", status);
         return this.riderRepository.findRandomByStatus(status);
     }
+
+    @Transactional(readOnly = true)
+    public Boolean isOnline(String userName) {
+        Rider rider = retriveRiderByUserName(userName);
+        return rider.getActive() == RiderStatus.ONLINE;
+    }
 }

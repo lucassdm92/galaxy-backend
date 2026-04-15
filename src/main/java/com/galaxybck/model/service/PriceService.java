@@ -47,7 +47,7 @@ public class PriceService {
 
         PriceCalculation calculation = new PriceCalculation();
 
-        double km = 3.00; //this.googleMapsService.getDistanceInKm(request.origin(), request.destination(), "ie");
+        BigDecimal distanceKm = BigDecimal.valueOf(request.distanceMeters()).divide(BigDecimal.valueOf(1000.0));
 
         User user = userService.findUserByUserName(request.username()).orElseThrow(() -> new UserNotFoundExcpetion(request.username()));
         ClientEntity client = clientService.searchClientByUserId(user.getId());
@@ -55,9 +55,8 @@ public class PriceService {
         PriceConfig config = priceRepository.findLatestById().orElseThrow(PriceCalculationNotFoundException::new);
 
         BigDecimal totalPrice = config.getBaseDeliveryPrice();
-        BigDecimal kmDecimal = BigDecimal.valueOf(km);
 
-        BigDecimal[] kmResult = applyKmCost(totalPrice, kmDecimal, config);
+        BigDecimal[] kmResult = applyKmCost(totalPrice, distanceKm, config);
         totalPrice = kmResult[0];
         BigDecimal exceededKmCost = kmResult[1];
 
@@ -88,11 +87,11 @@ public class PriceService {
         calculation.setCommissionValue(commission.setScale(2, RoundingMode.HALF_UP));
         calculation.setServiceFeeValue(config.getServiceFee());
         calculation.setExceededKmCost(exceededKmCost.setScale(2, RoundingMode.HALF_UP));
-        calculation.setDistanceKm(kmDecimal.setScale(2, RoundingMode.HALF_UP));
+        calculation.setDistanceKm(distanceKm.setScale(2, RoundingMode.HALF_UP));
         calculation.setClientEntity(client);
         priceCalculationRepository.save(calculation);
 
-        return new PriceCalculatorResponse(calculation.getId(), totalPrice, kmDecimal);
+        return new PriceCalculatorResponse(calculation.getId(), totalPrice, distanceKm);
     }
 
     @Transactional(readOnly = true)

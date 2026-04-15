@@ -16,7 +16,7 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Integer> {
 
     List<Delivery> findByStatus(DeliveryStatus status);
 
-    List<Delivery> findByRiderId(Integer riderId);
+    List<Delivery> findDeliveryByRiderIdAndStatus(Integer riderId, DeliveryStatus status);
     Boolean existsByExternalDeliveryCodeAndClientEntityId(String externalCodeId, Integer clientId);
 
     List<Delivery> findDeliveriesByClientEntity(ClientEntity clientEntity);

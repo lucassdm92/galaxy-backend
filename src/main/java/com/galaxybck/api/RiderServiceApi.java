@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,5 +54,12 @@ public class RiderServiceApi {
         log.info("PATCH /api/rider/{}/status called - newStatus={}", userName, riderStatusRequest.riderStatus());
         this.riderService.updateStatus(userName, riderStatusRequest.riderStatus());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/isonline")
+    @PreAuthorize("hasRole('RIDER')")
+    public ResponseEntity<Boolean> isOnline(@AuthenticationPrincipal UserDetails userDetails) {
+        log.info("GET /api/rider/isonline called - userName={}", userDetails.getUsername());
+        return ResponseEntity.ok(riderService.isOnline(userDetails.getUsername()));
     }
 }

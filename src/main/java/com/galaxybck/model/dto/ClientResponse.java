@@ -37,6 +37,9 @@ public class ClientResponse {
     @JsonProperty("active")
     private Boolean active;
 
+    @JsonProperty("country_code")
+    private String countryCode;
+
     @JsonProperty("user")
     private UserResponse user;
 
@@ -48,6 +51,7 @@ public class ClientResponse {
         dto.vat = entity.getVat();
         dto.createdBy = entity.getCreatedBy();
         dto.active = entity.getActive();
+        dto.countryCode = entity.getCountryCode();
         dto.user = UserResponse.from(entity.getUser());
         return dto;
     }

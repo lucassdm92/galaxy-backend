@@ -72,9 +72,9 @@ public class DeliveryService {
     }
 
     @Transactional(readOnly = true)
-    public List<DeliveryResponse> findDeliveryByRiderId(String userName ) {
+    public List<DeliveryResponse> findDeliveryByRiderIdStatus(String userName , DeliveryStatus status) {
        Rider rider =  this.riderService.retriveRiderByUserName(userName);
-       return deliveryRepository.findByRiderId(rider.getId())
+       return deliveryRepository.findDeliveryByRiderIdAndStatus(rider.getId(),status)
                 .stream()
                 .map(DeliveryResponse::from)
                 .toList();
@@ -105,6 +105,10 @@ public class DeliveryService {
                 .externalDeliveryCode(this.generateUniqueCode(clientEntity))
                 .status(DeliveryStatus.PENDING)
                 .clientEntity(clientEntity)
+                .origemLatitude(request.origemLatitude())
+                .origemLongitude(request.origemLongitude())
+                .destinoLatitude(request.destinoLatitude())
+                .destinoLongitude(request.destinoLongitude())
                 .passwordToCollect(1000 + random.nextInt(9000))
                 .passwordToDelivery(1000 + random.nextInt(9000))
                 .customerEmail(request.customerEmail())

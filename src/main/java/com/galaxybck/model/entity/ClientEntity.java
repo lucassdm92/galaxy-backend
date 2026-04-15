@@ -31,6 +31,10 @@ public class ClientEntity {
     @Column(name = "ADDRESS", length = 255)
     private String address;
 
+    @Column(name = "country_code", length = 4)
+    private String countryCode;
+
+
     @Column(name = "VAT", length = 20)
     private String vat;
 

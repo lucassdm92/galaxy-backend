@@ -25,7 +25,7 @@ public class PriceServicesApi {
     @PostMapping("/current")
     @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
     public ResponseEntity<PriceCalculatorResponse> getCurrentPrice(@RequestBody RequestPrice request) {
-        log.info("POST /api/prices/current called - origin: {}, destination: {}", request.origin(), request.destination());
+        log.info("POST /api/prices/current called distance {} " ,request.distanceMeters() );
         PriceCalculatorResponse response = priceService.getPriceConfig(request);
         return ResponseEntity.ok(response);
     }

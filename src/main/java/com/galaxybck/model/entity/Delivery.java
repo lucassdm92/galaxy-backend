@@ -4,6 +4,7 @@ import com.galaxybck.model.enums.DeliveryStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,6 +26,18 @@ public class Delivery {
 
     @Column(name = "destination", nullable = false, length = 255)
     private String destination;
+
+    @Column(name = "origem_latitude", precision = 9, scale = 7, nullable = false)
+    private BigDecimal origemLatitude;
+
+    @Column(name = "origem_longitude", precision = 10, scale = 7, nullable = false)
+    private BigDecimal origemLongitude;
+
+    @Column(name = "destino_latitude", precision = 9, scale = 7, nullable = false)
+    private BigDecimal destinoLatitude;
+
+    @Column(name = "destino_longitude", precision = 10, scale = 7, nullable = false)
+    private BigDecimal destinoLongitude;
 
     @Column(name = "customer_name", nullable = false, length = 100)
     private String customerName;

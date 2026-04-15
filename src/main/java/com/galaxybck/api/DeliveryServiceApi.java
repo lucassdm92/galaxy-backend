@@ -3,11 +3,14 @@ package com.galaxybck.api;
 import com.galaxybck.model.dto.DeliveryHistoryResponse;
 import com.galaxybck.model.dto.DeliveryRequest;
 import com.galaxybck.model.dto.DeliveryResponse;
+import com.galaxybck.model.enums.DeliveryStatus;
 import com.galaxybck.model.service.DeliveryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,10 +49,13 @@ public class DeliveryServiceApi {
         return ResponseEntity.ok(deliveryService.requestDelivery(request));
     }
 
-    @GetMapping("/rider/{userName}")
-    public ResponseEntity<List<DeliveryResponse>> listDeliveryByRiderId(@PathVariable String userName) {
-        log.info("GET /api/myDelivery/listDeliveryByRiderId called");
-        return ResponseEntity.ok(deliveryService.findDeliveryByRiderId(userName));
+    @GetMapping("/rider/status/{status}")
+    @PreAuthorize("hasAnyRole('RIDER','ADMIN')")
+    public ResponseEntity<List<DeliveryResponse>> findDeliveryByRiderStatus(
+            @PathVariable String status,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        log.info("GET /api/delivery/rider/status/{} called", status);
+        return ResponseEntity.ok(deliveryService.findDeliveryByRiderIdStatus(userDetails.getUsername(), DeliveryStatus.valueOf(status)));
     }
 
     @PostMapping("/accept")
